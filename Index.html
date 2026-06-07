@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Para Ti ❤️</title>
+
+<style>
+body{
+    margin:0;
+    overflow:hidden;
+    background:#000814;
+    font-family:Arial,sans-serif;
+}
+
+canvas{
+    display:block;
+}
+
+.text{
+    position:absolute;
+    color:#ff4d6d;
+    font-weight:bold;
+    pointer-events:none;
+    text-shadow:0 0 10px #ff004c;
+}
+
+.word{
+    position:absolute;
+    color:white;
+    font-size:18px;
+    animation:flotar 5s infinite alternate ease-in-out;
+}
+
+@keyframes flotar{
+    from{transform:translateY(0px);}
+    to{transform:translateY(-20px);}
+}
+
+#btn{
+    position:fixed;
+    bottom:20px;
+    left:50%;
+    transform:translateX(-50%);
+    padding:12px 25px;
+    border:none;
+    border-radius:30px;
+    background:#ff004c;
+    color:white;
+    font-size:18px;
+    cursor:pointer;
+    box-shadow:0 0 20px #ff004c;
+}
+
+.corazon{
+    position:fixed;
+    font-size:24px;
+    pointer-events:none;
+    animation:subir 3s linear forwards;
+}
+
+@keyframes subir{
+    from{
+        opacity:1;
+        transform:translateY(0) scale(1);
+    }
+    to{
+        opacity:0;
+        transform:translateY(-300px) scale(2);
+    }
+}
+</style>
+</head>
+<body>
+
+<button id="btn">💗 Lanzar corazones</button>
+
+<script>
+const frases = [];
+
+for(let t=0;t<360;t+=8){
+    let x = 16*Math.pow(Math.sin(t*Math.PI/180),3);
+    let y = 13*Math.cos(t*Math.PI/180)
+          -5*Math.cos(2*t*Math.PI/180)
+          -2*Math.cos(3*t*Math.PI/180)
+          -Math.cos(4*t*Math.PI/180);
+
+    let texto = document.createElement("div");
+    texto.className="text";
+    texto.innerHTML="I LOVE YOU";
+
+    document.body.appendChild(texto);
+
+    frases.push({
+        el:texto,
+        x:x,
+        y:y
+    });
+}
+
+let angulo=0;
+
+function animar(){
+
+    angulo+=0.01;
+
+    frases.forEach(p=>{
+
+        let z=Math.sin(angulo+p.x)*100;
+
+        let escala=(z+200)/300;
+
+        let px=window.innerWidth/2+p.x*22*escala;
+        let py=window.innerHeight/2-p.y*22*escala;
+
+        p.el.style.left=px+"px";
+        p.el.style.top=py+"px";
+        p.el.style.transform=`scale(${escala})`;
+        p.el.style.opacity=escala;
+    });
+
+    requestAnimationFrame(animar);
+}
+
+animar();
+
+const palabras=[
+"❤️ Mi amor",
+"✨ Brillas",
+"💫 Mi calma",
+"🌹 Mi razón",
+"💕 Siempre",
+"🥰 Contigo",
+"💖 Te extraño",
+"🌷 Esperanza",
+"💝 Sueños",
+"👑 Reina"
+];
+
+palabras.forEach(()=>{
+    let w=document.createElement("div");
+    w.className="word";
+    w.innerHTML=palabras[Math.floor(Math.random()*palabras.length)];
+
+    w.style.left=Math.random()*window.innerWidth+"px";
+    w.style.top=Math.random()*window.innerHeight+"px";
+
+    document.body.appendChild(w);
+});
+
+document.getElementById("btn").onclick=()=>{
+
+    for(let i=0;i<25;i++){
+
+        let c=document.createElement("div");
+
+        c.className="corazon";
+        c.innerHTML=["💗","❤️","💕","💖"][Math.floor(Math.random()*4)];
+
+        c.style.left=(window.innerWidth/2+(Math.random()*200-100))+"px";
+        c.style.bottom="80px";
+
+        document.body.appendChild(c);
+
+        setTimeout(()=>{
+            c.remove();
+        },3000);
+    }
+};
+</script>
+
+</body>
+</html>
